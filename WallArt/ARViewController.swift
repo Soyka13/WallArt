@@ -28,9 +28,7 @@ class ARViewController: UIViewController {
     
     private lazy var galleryButton = UIButton().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.addAction(UIAction(handler: { [weak self]action in
-            self?.showImagePicker()
-        }), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(showImagePicker), for: .touchUpInside)
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 5
         $0.layer.borderWidth = 1
@@ -129,7 +127,7 @@ extension ARViewController: ARSCNViewDelegate {
 }
 
 extension ARViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    private func showImagePicker() {
+    @objc private func showImagePicker() {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .photoLibrary
         imagePicker.modalPresentationStyle = .automatic
