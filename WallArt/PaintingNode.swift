@@ -19,11 +19,12 @@ class PaintingNode: SCNNode {
     lazy var height: CGFloat = image.size.height / 10000
     
     let topBottomFrameHeight: CGFloat = 0.03
-    let leftRightFrameHeight: CGFloat = 0.04
-    let frameLength: CGFloat = 0.04
+    let leftRightFrameHeight: CGFloat = 0.03
+    let frameLength: CGFloat = 0.03
     
     var backgroundBoxNode: SCNNode?
     var imageNode: SCNNode?
+    var glassNode: SCNNode?
     
     init(image: UIImage) {
         self.image = image
@@ -66,12 +67,40 @@ class PaintingNode: SCNNode {
         }
     }
     
+    func setupForeground(position: SCNVector3) {
+        guard let backgroundBoxNode = backgroundBoxNode else { return }
+        let glassGeometry = SCNPlane(width: width, height: height)
+        print("width \(width) height \(height)")
+        
+        let material = SCNMaterial()
+            .then {
+                $0.lightingModel = .blinn
+                $0.transparency = 0.2
+                $0.transparencyMode = .dualLayer
+                $0.fresnelExponent = 1.5
+                $0.isDoubleSided = true
+                $0.specular.contents = UIColor(white: 0.6, alpha: 1.0)
+                $0.diffuse.contents = UIColor.gray
+                $0.shininess = 25
+                $0.reflective.contents = UIImage(named: "SilverNormal")
+            }
+        
+        glassGeometry.materials = [material]
+        
+        glassNode = SCNNode(geometry: glassGeometry)
+        if let imageNode = glassNode {
+            imageNode.position = SCNVector3(backgroundBoxNode.position.x, position.y, position.z + Float(frameLength)/4 + 0.002)
+            print("Position of image node: \(imageNode.position)")
+            backgroundBoxNode.addChildNode(imageNode)
+        }
+    }
+    
     func setup(position: SCNVector3) {
         setupBackground(position: position)
         setupImageNode(position: position)
+        setupForeground(position: position)
         
-        let frame = Frame(width: width, height: height, topBottomFrameHeight: topBottomFrameHeight, leftRightFrameHeight: leftRightFrameHeight, frameLength: frameLength, position: position)
+        let frame = Frame(width: width, height: height, topBottomFrameHeight: topBottomFrameHeight, leftRightFrameHeight: leftRightFrameHeight, frameLength: frameLength)
         addChildNode(frame)
-       
     }
 }
