@@ -82,7 +82,7 @@ class PaintingNode: SCNNode {
                 $0.specular.contents = UIColor(white: 0.6, alpha: 1.0)
                 $0.diffuse.contents = UIColor.gray
                 $0.shininess = 25
-                $0.reflective.contents = UIImage(named: "SilverNormal")
+                $0.reflective.contents = image
             }
         
         glassGeometry.materials = [material]
