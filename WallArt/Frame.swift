@@ -38,50 +38,50 @@ class Frame: SCNNode {
     
     func setupFrameSides() {
         // The vertices
-        let h = 0.1
-        let r = 0.25
-        let w = 0.5
-        let l = 0.05
+        let h = topBottomFrameHeight
+        let r = height/2
+        let w = width
+        let l = frameLength
         
-        let v0 = SCNVector3(-w/2, r, 0)
-        let v3 = SCNVector3(-w/2, r+h, 0)
-        let v1 = SCNVector3(w/2, r, 0)
-        let v2 = SCNVector3(w/2, r+h, 0)
-        let v4 = SCNVector3(-w/2, r, -l)
-        let v6 = SCNVector3(-w/2, r+h, -l)
-        
-        let v5 = SCNVector3(w/2, r, -l)
-        let v7 = SCNVector3(w/2, r+h, -l)
-        
-        let v8 = SCNVector3(-w/2, r, 0)
-        let v9 = SCNVector3(-w/2+h, r, 0)
-        let v10 = SCNVector3(-w/2, -r, 0)
-        let v11 = SCNVector3(-w/2+h, -r, 0)
-        let v12 = SCNVector3(-w/2, r, -l)
-        let v13 = SCNVector3(-w/2+h, r, -l)
-        let v14 = SCNVector3(-w/2 , -r, -l)
-        let v15 = SCNVector3(-w/2+h, -r, -l)
-        
-        let v18 = SCNVector3(-w/2, -r, 0)
-        let v16 = SCNVector3(-w/2, -r-h, 0)
-        let v19 = SCNVector3(w/2, -r, 0)
+        let v0 = SCNVector3(-w/2-h, r, 0)
+        let v3 = SCNVector3(-w/2-h, r+h, 0)
+        let v1 = SCNVector3(w/2+h, r, 0)
+        let v2 = SCNVector3(w/2+h, r+h, 0)
+        let v4 = SCNVector3(-w/2-h, r, -l)
+        let v6 = SCNVector3(-w/2-h, r+h, -l)
+
+        let v5 = SCNVector3(w/2+h, r, -l)
+        let v7 = SCNVector3(w/2+h, r+h, -l)
+
+        let v8 = SCNVector3(-w/2-h, r, 0)
+        let v9 = SCNVector3(-w/2, r, 0)
+        let v10 = SCNVector3(-w/2-h, -r, 0)
+        let v11 = SCNVector3(-w/2, -r, 0)
+        let v12 = SCNVector3(-w/2-h, r, -l)
+        let v13 = SCNVector3(-w/2, r, -l)
+        let v14 = SCNVector3(-w/2-h , -r, -l)
+        let v15 = SCNVector3(-w/2, -r, -l)
+
+        let v18 = SCNVector3(-w/2-h, -r, 0)
+        let v16 = SCNVector3(-w/2-h, -r-h, 0)
+        let v19 = SCNVector3(w/2+h, -r, 0)
         let v17 = SCNVector3(w/2, -r-h, 0)
-        
-        let v22 = SCNVector3(-w/2, -r, -l)
-        let v20 = SCNVector3(-w/2, -r-h, -l)
+
+        let v22 = SCNVector3(-w/2-h, -r, -l)
+        let v20 = SCNVector3(-w/2-h, -r-h, -l)
         let v23 = SCNVector3(w/2, -r, -l)
         let v21 = SCNVector3(w/2, -r-h, -l)
-        
-        let v24 = SCNVector3(w/2-h, -r, 0)
-        let v25 = SCNVector3(w/2, -r, 0)
-        let v26 = SCNVector3(w/2-h, r, 0)
-        let v27 = SCNVector3(w/2, r, 0)
-        
-        let v28 = SCNVector3(w/2-h, -r, -l)
-        let v29 = SCNVector3(w/2, -r, -l)
-        let v30 = SCNVector3(w/2-h, r, -l)
-        let v31 = SCNVector3(w/2, r, -l)
-        
+
+        let v24 = SCNVector3(w/2, -r-h, 0)
+        let v25 = SCNVector3(w/2+h, -r-h, 0)
+        let v26 = SCNVector3(w/2, r+h, 0)
+        let v27 = SCNVector3(w/2+h, r+h, 0)
+
+        let v28 = SCNVector3(w/2, -r-h, -l)
+        let v29 = SCNVector3(w/2+h, -r-h, -l)
+        let v30 = SCNVector3(w/2, r+h, -l)
+        let v31 = SCNVector3(w/2+h, r+h, -l)
+
         let vertices: [SCNVector3] = [
             /// TOP SIDE
             // Front
@@ -163,33 +163,30 @@ class Frame: SCNNode {
             v31, v28, v30,
             v31, v29, v28
         ]
-        
+
         let indices = vertices.enumerated().map{Int32($0.0)}
         print(indices)
         let source = SCNGeometrySource(vertices: vertices)
         let element = SCNGeometryElement(indices: indices, primitiveType: .triangles)
         let textcoord: [CGPoint] = vertices.map {CGPoint(x: CGFloat($0.x), y: CGFloat($0.y))}
-        print(textcoord.count)
-        let textSource = SCNGeometrySource(textureCoordinates: textcoord)
         
+        let textSource = SCNGeometrySource(textureCoordinates: textcoord)
+
         let geometry = SCNGeometry(sources: [source, textSource], elements: [element])
         let material = SCNMaterial().then {
             $0.isDoubleSided = true
             $0.diffuse.contents = UIImage(named: "SilverColor")
+            $0.normal.contents = UIImage(named: "SilverNormal")
+            $0.roughness.contents = UIImage(named: "SilverRoughness")
             $0.diffuse.wrapS = .repeat
             $0.diffuse.wrapT = .repeat
-        
+            $0.selfIllumination.wrapS = .repeat
+            $0.selfIllumination.wrapT = .repeat
         }
         geometry.materials = [material]
         let node = SCNNode(geometry: geometry)
-        
+
         node.eulerAngles.x -= Float.pi/2
         addChildNode(node)
-    }
-}
-
-extension Int {
-    func degreesToRadians() -> CGFloat {
-        return CGFloat(self) * CGFloat.pi / 180.0
     }
 }

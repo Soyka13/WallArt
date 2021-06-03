@@ -44,7 +44,7 @@ class PaintingNode: SCNNode {
         backgroundBoxNode = SCNNode(geometry: backgroundBox)
         if let backgroundBoxNode = backgroundBoxNode {
             backgroundBoxNode.eulerAngles.x -= Float.pi/2
-            backgroundBoxNode.position = SCNVector3(position.x, position.y + Float(backgroundBox.length/2), position.z)
+            backgroundBoxNode.position = SCNVector3(position.x, position.y, position.z)
             addChildNode(backgroundBoxNode)
         }
     }
@@ -97,12 +97,14 @@ class PaintingNode: SCNNode {
     }
     
     func setup(position: SCNVector3) {
-//        setupBackground(position: position)
-//        setupImageNode(position: position)
+        setupBackground(position: position)
+        setupImageNode(position: position)
 //        setupForeground(position: position)
         
         let frame = Frame(width: width, height: height, topBottomFrameHeight: topBottomFrameHeight, leftRightFrameHeight: leftRightFrameHeight, frameLength: frameLength)
-        frame.position = position
+        if let backBox = backgroundBoxNode {
+            frame.position = SCNVector3(backBox.position.x, backBox.position.y + Float(frameLength)/2, backBox.position.z)
+        }
         addChildNode(frame)
     }
 }
