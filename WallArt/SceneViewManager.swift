@@ -16,6 +16,8 @@ class SceneViewManager {
     private var currentNode: SCNNode?
 
     private var planes = [PlaneNode]()
+    
+    private(set) var pictureNode: PaintingNode?
 
     var isObjectPlaced: Bool {
         return currentNode != nil
@@ -66,7 +68,8 @@ class SceneViewManager {
         }
         sceneView.setNeedsDisplay()
         if !isObjectPlaced {
-            let pictureNode = PaintingNode(image: image)
+            pictureNode = PaintingNode(image: image)
+            guard let pictureNode = pictureNode else { return }
             pictureNode.setup(position: node.position)
             node.addChildNode(pictureNode)
             currentNode = pictureNode

@@ -37,6 +37,18 @@ class ARViewController: UIViewController {
         $0.setTitleColor(.blue, for: .normal)
     }
     
+    private lazy var glassButton = UIButton().then {
+        $0.isHidden = true
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.addTarget(self, action: #selector(changleGlass), for: .touchUpInside)
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 5
+        $0.layer.borderWidth = 1
+        $0.setTitle("Reflect", for: .normal)
+        $0.titleLabel?.textColor = .blue
+        $0.setTitleColor(.blue, for: .normal)
+    }
+    
     private var viewCenter: CGPoint {
         let viewBounds = view.bounds
         return CGPoint(x: viewBounds.width / 2.0, y: viewBounds.height / 2.0)
@@ -95,6 +107,13 @@ private extension ARViewController {
             make.centerX.equalTo(view.snp.centerX)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
         }
+        
+        view.addSubview(glassButton)
+        glassButton.snp.makeConstraints {
+            $0.height.equalTo(50)
+            $0.width.equalTo(100)
+            $0.right.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+        }
     }
 }
 
@@ -105,6 +124,7 @@ extension ARViewController: ARSCNViewDelegate {
             
             arSceneManager.addObject(objectImage, to: node)
             arSceneManager.removePlanes()
+            glassButton.isHidden = false
             return
         }
 
@@ -134,6 +154,10 @@ extension ARViewController: UIImagePickerControllerDelegate, UINavigationControl
         imagePicker.delegate = self
         
         present(imagePicker, animated: true, completion: nil)
+    }
+    
+    @objc private func changleGlass() {
+        arSceneManager.pictureNode?.changeReflection()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

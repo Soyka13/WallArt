@@ -24,7 +24,8 @@ class Frame: SCNNode {
         self.frameLength = frameLength
         super.init()
         
-        setupFrameSides()
+//        setupFrameSides()
+        setupFrame()
     }
     
     required init?(coder: NSCoder) {
@@ -78,6 +79,41 @@ class Frame: SCNNode {
         bottomNode.position = SCNVector3(0, frameLength/2, height/2 + topBottomFrameHeight/2)
         bottomNode.eulerAngles = SCNVector3(90.degreesToRadians(), 180.degreesToRadians(), 0)
         addChildNode(bottomNode)
+    }
+    
+    func setupFrame() {
+        let topBottomTrapezoid = UIBezierPath()
+        topBottomTrapezoid.move(to: CGPoint(x: -width/2, y: height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2, y: height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2 + topBottomFrameHeight, y: height/2 + topBottomFrameHeight))
+        topBottomTrapezoid.addLine(to: CGPoint(x: -width/2 - topBottomFrameHeight, y: height/2 + topBottomFrameHeight))
+        topBottomTrapezoid.move(to: CGPoint(x: width/2, y: height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2, y: -height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2 + leftRightFrameHeight, y: -height/2 - leftRightFrameHeight))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2 + leftRightFrameHeight, y: height/2 + leftRightFrameHeight))
+        topBottomTrapezoid.move(to: CGPoint(x: -width/2, y: -height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2, y: -height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: width/2 + topBottomFrameHeight, y: -height/2 - topBottomFrameHeight))
+        topBottomTrapezoid.addLine(to: CGPoint(x: -width/2 - topBottomFrameHeight, y: -height/2 - topBottomFrameHeight))
+        topBottomTrapezoid.move(to: CGPoint(x: -width/2, y: height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: -width/2, y: -height/2))
+        topBottomTrapezoid.addLine(to: CGPoint(x: -width/2 - leftRightFrameHeight, y: -height/2 - leftRightFrameHeight))
+        topBottomTrapezoid.addLine(to: CGPoint(x: -width/2 - leftRightFrameHeight, y: height/2 + leftRightFrameHeight))
+        topBottomTrapezoid.close()
+
+
+        let top = SCNShape(path: topBottomTrapezoid, extrusionDepth: frameLength)
+        top.firstMaterial?.diffuse.contents = UIImage(named: "wood")
+        top.chamferMode = .front
+        let chamfer = UIBezierPath()
+        chamfer.move(to: CGPoint(x: 0, y: 1))
+        chamfer.addCurve(to: CGPoint(x: 1, y: 0), controlPoint1: CGPoint(x: 0.4, y: 0.9), controlPoint2: CGPoint(x: 0.4, y: 0.2))
+        top.chamferProfile = chamfer
+        top.chamferRadius = frameLength/3
+        let bodyNode = SCNNode(geometry: top)
+        bodyNode.position = SCNVector3(0, frameLength/2, 0)
+        bodyNode.eulerAngles = SCNVector3(-90.degreesToRadians(), 0, 0)
+        addChildNode(bodyNode)
     }
 }
 
