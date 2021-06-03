@@ -83,6 +83,7 @@ class PaintingNode: SCNNode {
                 $0.diffuse.contents = UIColor.gray
                 $0.shininess = 25
                 $0.reflective.contents = image
+                $0.reflective.intensity = 1.5
             }
         
         glassGeometry.materials = [material]
@@ -96,11 +97,12 @@ class PaintingNode: SCNNode {
     }
     
     func setup(position: SCNVector3) {
-        setupBackground(position: position)
-        setupImageNode(position: position)
-        setupForeground(position: position)
+//        setupBackground(position: position)
+//        setupImageNode(position: position)
+//        setupForeground(position: position)
         
         let frame = Frame(width: width, height: height, topBottomFrameHeight: topBottomFrameHeight, leftRightFrameHeight: leftRightFrameHeight, frameLength: frameLength)
+        frame.position = position
         addChildNode(frame)
     }
 }

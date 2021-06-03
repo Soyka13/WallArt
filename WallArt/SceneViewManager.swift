@@ -29,6 +29,8 @@ class SceneViewManager {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .vertical
         sceneView.session.run(configuration)
+        
+        
         showSceneDebugInfo()
     }
 
