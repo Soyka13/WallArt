@@ -27,24 +27,24 @@ class PaintingNode: SCNNode {
     var glassNode: SCNNode?
     
     lazy var lowReflection = SCNMaterial().then {
-            $0.lightingModel = .blinn
-            $0.transparency = 0.15
-            $0.transparencyMode = .dualLayer
-            $0.fresnelExponent = 0.5
-            $0.isDoubleSided = true
-            $0.diffuse.contents = UIColor(white: 0.5, alpha: 1.0)
-            $0.reflective.contents = image
-        }
+        $0.lightingModel = .blinn
+        $0.transparency = 0.15
+        $0.transparencyMode = .dualLayer
+        $0.fresnelExponent = 2.0
+        $0.isDoubleSided = true
+        $0.diffuse.contents = UIColor(white: 0.4, alpha: 1.0)
+        $0.reflective.contents = image
+    }
     
     lazy var hightReflection = SCNMaterial().then {
-            $0.lightingModel = .blinn
-            $0.transparency = 0.2
-            $0.transparencyMode = .dualLayer
-            $0.fresnelExponent = 2.0
-            $0.isDoubleSided = true
-            $0.diffuse.contents = UIColor(white: 0.5, alpha: 1.0)
-            $0.reflective.contents = image
-        }
+        $0.lightingModel = .blinn
+        $0.transparency = 0.2
+        $0.transparencyMode = .dualLayer
+        $0.fresnelExponent = 0.5
+        $0.isDoubleSided = true
+        $0.diffuse.contents = UIColor(white: 0.5, alpha: 1.0)
+        $0.reflective.contents = image
+    }
     
     init(image: UIImage) {
         self.image = image
@@ -57,19 +57,18 @@ class PaintingNode: SCNNode {
     }
     
     func changeReflection() {
-            guard let element = glassNode?.geometry else { return }
-            if element.materials.contains(hightReflection) {
-                glassNode?.geometry?.materials = [lowReflection]
-            } else {
-                glassNode?.geometry?.materials = [hightReflection]
-            }
-        print(element.materials)
+        guard let element = glassNode?.geometry else { return }
+        if element.materials.contains(hightReflection) {
+            glassNode?.geometry?.materials = [lowReflection]
+        } else {
+            glassNode?.geometry?.materials = [hightReflection]
         }
+    }
     
     private func setupBackground(position: SCNVector3) {
         // create image background
         let backgroundBox = SCNBox(width: width, height: height, length: frameLength/2, chamferRadius: 0.001)
-//        backgroundBox.firstMaterial?.diffuse.contents = UIColor(red: 158/255, green: 158/255, blue: 158/255, alpha: 1)
+        //        backgroundBox.firstMaterial?.diffuse.contents = UIColor(red: 158/255, green: 158/255, blue: 158/255, alpha: 1)
         backgroundBox.firstMaterial?.diffuse.contents = UIColor.white
         backgroundBoxNode = SCNNode(geometry: backgroundBox)
         if let backgroundBoxNode = backgroundBoxNode {

@@ -107,9 +107,10 @@ class Frame: SCNNode {
         top.chamferMode = .front
         let chamfer = UIBezierPath()
         chamfer.move(to: CGPoint(x: 0, y: 1))
-        chamfer.addCurve(to: CGPoint(x: 1, y: 0), controlPoint1: CGPoint(x: 0.4, y: 0.9), controlPoint2: CGPoint(x: 0.4, y: 0.2))
+        chamfer.addQuadCurve(to: CGPoint(x: 1, y: 0), controlPoint: CGPoint(x: 0.4, y: 0.4))
+//        chamfer.addCurve(to: CGPoint(x: 1, y: 0), controlPoint1: CGPoint(x: 0.4, y: 0.9), controlPoint2: CGPoint(x: 0.4, y: 0.2))
         top.chamferProfile = chamfer
-        top.chamferRadius = frameLength/3
+        top.chamferRadius = frameLength/4
         let bodyNode = SCNNode(geometry: top)
         bodyNode.position = SCNVector3(0, frameLength/2, 0)
         bodyNode.eulerAngles = SCNVector3(-90.degreesToRadians(), 0, 0)
