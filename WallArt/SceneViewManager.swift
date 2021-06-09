@@ -30,7 +30,9 @@ class SceneViewManager {
     func setupARSessionConfig() {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .vertical
+        configuration.environmentTexturing = .automatic
         sceneView.session.run(configuration)
+        sceneView.automaticallyUpdatesLighting = true
         showSceneDebugInfo()
     }
 

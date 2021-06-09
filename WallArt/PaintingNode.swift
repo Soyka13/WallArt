@@ -27,23 +27,33 @@ class PaintingNode: SCNNode {
     var glassNode: SCNNode?
     
     lazy var lowReflection = SCNMaterial().then {
-        $0.lightingModel = .blinn
-        $0.transparency = 0.15
-        $0.transparencyMode = .dualLayer
-        $0.fresnelExponent = 2.0
-        $0.isDoubleSided = true
-        $0.diffuse.contents = UIColor(white: 0.4, alpha: 1.0)
-        $0.reflective.contents = image
+//        $0.lightingModel = .blinn
+//        $0.transparency = 0.15
+//        $0.transparencyMode = .dualLayer
+//        $0.fresnelExponent = 2.0
+//        $0.isDoubleSided = true
+//        $0.diffuse.contents = UIColor(white: 0.4, alpha: 1.0)
+//        $0.reflective.contents = image
+        
+        $0.lightingModel = .physicallyBased
+        $0.roughness.contents = 0.3
+        $0.metalness.contents = 0.5
+        $0.transparency = 0.3
     }
     
     lazy var hightReflection = SCNMaterial().then {
-        $0.lightingModel = .blinn
-        $0.transparency = 0.2
-        $0.transparencyMode = .dualLayer
-        $0.fresnelExponent = 0.5
-        $0.isDoubleSided = true
-        $0.diffuse.contents = UIColor(white: 0.5, alpha: 1.0)
-        $0.reflective.contents = image
+//        $0.lightingModel = .blinn
+//        $0.transparency = 0.2
+//        $0.transparencyMode = .dualLayer
+//        $0.fresnelExponent = 0.5
+//        $0.isDoubleSided = true
+//        $0.diffuse.contents = UIColor(white: 0.5, alpha: 1.0)
+//        $0.reflective.contents = image
+        
+        $0.lightingModel = .physicallyBased
+        $0.roughness.contents = 0.15
+        $0.metalness.contents = 1.0
+        $0.transparency = 0.3
     }
     
     init(image: UIImage) {

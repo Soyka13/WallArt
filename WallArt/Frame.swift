@@ -24,8 +24,8 @@ class Frame: SCNNode {
         self.frameLength = frameLength
         super.init()
         
-//        setupFrameSides()
-        setupFrame()
+        setupFrameSides()
+//        setupFrame()
     }
     
     required init?(coder: NSCoder) {
