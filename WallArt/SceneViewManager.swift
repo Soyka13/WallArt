@@ -12,9 +12,9 @@ import SceneKit
 class SceneViewManager {
     
     private var sceneView: ARSCNView
-
+    
     private var currentNode: SCNNode?
-
+    
     private var planes = [PlaneNode]()
     
     private(set) var pictureNode: PaintingNode?
@@ -35,26 +35,26 @@ class SceneViewManager {
         sceneView.automaticallyUpdatesLighting = true
         showSceneDebugInfo()
     }
-
+    
     func pauseARSession() {
         guard let config = sceneView.session.configuration as? ARWorldTrackingConfiguration else { return }
         config.planeDetection = []
         print("AR session paused")
         sceneView.session.pause()
     }
-
+    
     func resetARSession() {
         guard let config = sceneView.session.configuration as? ARWorldTrackingConfiguration else { return }
         config.planeDetection = .vertical
         print("session reseted")
         sceneView.session.run(config, options: [.resetTracking, .removeExistingAnchors])
     }
-
+    
     func showSceneDebugInfo() {
         sceneView.debugOptions = .showFeaturePoints
         sceneView.showsStatistics = true
     }
-
+    
     func removeARPlaneNode(node: SCNNode) {
         for childNode in node.childNodes {
             childNode.removeFromParentNode()
@@ -65,7 +65,7 @@ class SceneViewManager {
         sceneView.scene.rootNode.enumerateChildNodes { [weak self](node, stop) in
             if node is PaintingNode {
                 node.removeFromParentNode()
-                    self?.currentNode = nil
+                self?.currentNode = nil
             }
         }
         sceneView.setNeedsDisplay()
@@ -81,24 +81,24 @@ class SceneViewManager {
     func addNodeAnchor(worldTransform: simd_float4x4) {
         sceneView.session.add(anchor: ARAnchor(name: "node_anchor", transform: worldTransform))
     }
-
+    
     func addPlane(to node: SCNNode, anchor: ARPlaneAnchor) {
         let grid = PlaneNode(anchor: anchor)
         self.planes.append(grid)
         node.addChildNode(grid)
     }
-
+    
     func getPlane(with identifier: UUID) -> PlaneNode? {
         let grid = planes.filter { grid in
             return grid.anchor.identifier == identifier
         }.first
         return grid
     }
-
+    
     func removePlanes() {
         planes.forEach { $0.removeFromParentNode() }
     }
-
+    
     func resetProperties() {
         currentNode = nil
         planes.removeAll()

@@ -19,6 +19,8 @@ class ARViewController: UIViewController {
     
     let imagePicker = UIImagePickerController()
     
+    var isNewSettingsWasSet = false
+    
     private lazy var sceneView = ARSCNView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.delegate = self
@@ -45,6 +47,18 @@ class ARViewController: UIViewController {
         $0.layer.cornerRadius = 5
         $0.layer.borderWidth = 1
         $0.setTitle("Reflect", for: .normal)
+        $0.titleLabel?.textColor = .blue
+        $0.setTitleColor(.blue, for: .normal)
+    }
+    
+    private lazy var setSettingsButton = UIButton().then {
+        
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.addTarget(self, action: #selector(setSettings), for: .touchUpInside)
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 5
+        $0.layer.borderWidth = 1
+        $0.setTitle("Set Light", for: .normal)
         $0.titleLabel?.textColor = .blue
         $0.setTitleColor(.blue, for: .normal)
     }
@@ -87,6 +101,19 @@ class ARViewController: UIViewController {
             arSceneManager.addNodeAnchor(worldTransform: hitTestResult.worldTransform)
         }
     }
+    
+    @objc func setSettings() {
+        isNewSettingsWasSet = !isNewSettingsWasSet
+        if !isNewSettingsWasSet {
+            sceneView.autoenablesDefaultLighting = false
+            sceneView.automaticallyUpdatesLighting = false
+            sceneView.antialiasingMode = .multisampling4X
+        } else {
+            sceneView.autoenablesDefaultLighting = true
+            sceneView.automaticallyUpdatesLighting = true
+            sceneView.antialiasingMode = .none
+        }
+    }
 }
 
 private extension ARViewController {
@@ -113,6 +140,14 @@ private extension ARViewController {
             $0.height.equalTo(50)
             $0.width.equalTo(100)
             $0.right.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+        }
+        
+        view.addSubview(setSettingsButton)
+        setSettingsButton.snp.makeConstraints {
+            $0.height.equalTo(50)
+            $0.width.equalTo(100)
+            $0.left.equalTo(view.safeAreaLayoutGuide).offset(30)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
         }
     }
 }
@@ -144,6 +179,20 @@ extension ARViewController: ARSCNViewDelegate {
         guard anchor is ARPlaneAnchor else { return }
         arSceneManager.removeARPlaneNode(node: node)
     }
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        if isNewSettingsWasSet {
+            let estimate: ARLightEstimate? = sceneView.session.currentFrame?.lightEstimate
+            if estimate == nil {
+                return
+            }
+            print(estimate?.ambientIntensity)
+            
+            let intensity: CGFloat? = (estimate?.ambientIntensity)! / 1000.0
+            sceneView.scene.lightingEnvironment.intensity = intensity!
+            print(sceneView.scene.lightingEnvironment.intensity)
+        }
+     }
 }
 
 extension ARViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
