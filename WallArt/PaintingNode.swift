@@ -38,7 +38,7 @@ class PaintingNode: SCNNode {
     
     private func setupBackground(position: SCNVector3) {
         // create image background
-        let backgroundBox = SCNBox(width: width, height: height, length: frameLength/2, chamferRadius: 0.001)
+        let backgroundBox = SCNBox(width: width, height: height, length: frameLength/3, chamferRadius: 0.001)
 //        backgroundBox.firstMaterial?.diffuse.contents = UIColor(red: 158/255, green: 158/255, blue: 158/255, alpha: 1)
         backgroundBox.firstMaterial?.diffuse.contents = UIColor.white
         backgroundBoxNode = SCNNode(geometry: backgroundBox)
@@ -90,7 +90,7 @@ class PaintingNode: SCNNode {
         
         glassNode = SCNNode(geometry: glassGeometry)
         if let imageNode = glassNode {
-            imageNode.position = SCNVector3(backgroundBoxNode.position.x, position.y, position.z + Float(frameLength)/4 + 0.002)
+            imageNode.position = SCNVector3(backgroundBoxNode.position.x, position.y, position.z + Float(frameLength)/6 + 0.0011)
             print("Position of image node: \(imageNode.position)")
             backgroundBoxNode.addChildNode(imageNode)
         }
@@ -103,7 +103,7 @@ class PaintingNode: SCNNode {
         
         let frame = Frame(width: width, height: height, topBottomFrameHeight: topBottomFrameHeight, leftRightFrameHeight: leftRightFrameHeight, frameLength: frameLength)
         if let backBox = backgroundBoxNode {
-            frame.position = SCNVector3(backBox.position.x, backBox.position.y + Float(frameLength)/2, backBox.position.z)
+            frame.position = SCNVector3(backBox.position.x, backBox.position.y + Float(frameLength/1.25), backBox.position.z)
         }
         addChildNode(frame)
     }
