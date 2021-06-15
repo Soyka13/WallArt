@@ -142,13 +142,13 @@ private extension ARViewController {
             $0.right.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
         }
         
-        view.addSubview(setSettingsButton)
-        setSettingsButton.snp.makeConstraints {
-            $0.height.equalTo(50)
-            $0.width.equalTo(100)
-            $0.left.equalTo(view.safeAreaLayoutGuide).offset(30)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
-        }
+//        view.addSubview(setSettingsButton)
+//        setSettingsButton.snp.makeConstraints {
+//            $0.height.equalTo(50)
+//            $0.width.equalTo(100)
+//            $0.left.equalTo(view.safeAreaLayoutGuide).offset(30)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+//        }
     }
 }
 
