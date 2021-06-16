@@ -59,6 +59,16 @@ class PaintingNode: SCNNode {
         }
     }
     
+    func setReflection(metalness: Float? = nil, roughness: Float? = nil) {
+        guard let m = glassNode?.geometry?.materials.first?.metalness, let r = glassNode?.geometry?.materials.first?.roughness else { return }
+        if metalness != nil {
+        m.contents = metalness
+        }
+        if roughness != nil {
+        r.contents = roughness
+        }
+    }
+    
     private func setupBackground(position: SCNVector3) {
         // create image background
         let backgroundBox = SCNBox(width: width, height: height, length: frameLength/3, chamferRadius: 0.001)

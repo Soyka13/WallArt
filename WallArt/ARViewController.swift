@@ -51,6 +51,36 @@ class ARViewController: UIViewController {
         $0.setTitleColor(.blue, for: .normal)
     }
     
+    private lazy var metalnessSlider = UISlider().then {
+        $0.isHidden = true
+        $0.maximumValue = 1.0
+        $0.minimumValue = 0.0
+        $0.value = 1.0
+        $0.minimumTrackTintColor = UIColor.darkGray
+        $0.maximumTrackTintColor = UIColor.white
+        $0.addTarget(self, action: #selector(metalSliderMoved), for: .valueChanged)
+    }
+    
+    private lazy var roughnessSlider = UISlider().then {
+        $0.isHidden = true
+        $0.maximumValue = 0.6
+        $0.minimumValue = 0.0
+        $0.value = 0.25
+        $0.minimumTrackTintColor = UIColor.darkGray
+        $0.maximumTrackTintColor = UIColor.white
+        $0.addTarget(self, action: #selector(roughSliderMoved), for: .valueChanged)
+    }
+    
+    private lazy var roughLabel = UILabel().then {
+        $0.isHidden = true
+        $0.text = "Roughness"
+    }
+    
+    private lazy var metalLabel = UILabel().then {
+        $0.isHidden = true
+        $0.text = "Metalness"
+    }
+    
     private lazy var setSettingsButton = UIButton().then {
         
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +144,18 @@ class ARViewController: UIViewController {
             sceneView.antialiasingMode = .none
         }
     }
+    
+    @objc private func changleGlass() {
+        arSceneManager.pictureNode?.changeReflection()
+    }
+    
+    @objc func metalSliderMoved(_ sender: UISlider) {
+        arSceneManager.pictureNode?.setReflection(metalness: sender.value)
+    }
+    
+    @objc func roughSliderMoved(_ sender: UISlider) {
+        arSceneManager.pictureNode?.setReflection(roughness: sender.value)
+    }
 }
 
 private extension ARViewController {
@@ -135,12 +177,12 @@ private extension ARViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
         }
         
-        view.addSubview(glassButton)
-        glassButton.snp.makeConstraints {
-            $0.height.equalTo(50)
-            $0.width.equalTo(100)
-            $0.right.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
-        }
+//        view.addSubview(glassButton)
+//        glassButton.snp.makeConstraints {
+//            $0.height.equalTo(50)
+//            $0.width.equalTo(100)
+//            $0.right.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+//        }
         
 //        view.addSubview(setSettingsButton)
 //        setSettingsButton.snp.makeConstraints {
@@ -149,6 +191,30 @@ private extension ARViewController {
 //            $0.left.equalTo(view.safeAreaLayoutGuide).offset(30)
 //            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
 //        }
+        view.addSubview(metalLabel)
+        metalLabel.snp.makeConstraints {
+            $0.bottom.equalTo(galleryButton.snp.top).offset(-20)
+            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.width.equalTo(100)
+        }
+        view.addSubview(metalnessSlider)
+        metalnessSlider.snp.makeConstraints {
+            $0.centerY.equalTo(metalLabel.snp.centerY)
+            $0.left.equalTo(metalLabel.snp.right).offset(20)
+            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
+        }
+        view.addSubview(roughLabel)
+        roughLabel.snp.makeConstraints {
+            $0.bottom.equalTo(metalLabel.snp.top).offset(-20)
+            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
+            $0.width.equalTo(100)
+        }
+        view.addSubview(roughnessSlider)
+        roughnessSlider.snp.makeConstraints {
+            $0.centerY.equalTo(roughLabel.snp.centerY)
+            $0.left.equalTo(roughLabel.snp.right).offset(20)
+            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
+        }
     }
 }
 
@@ -160,6 +226,10 @@ extension ARViewController: ARSCNViewDelegate {
             arSceneManager.addObject(objectImage, to: node)
             arSceneManager.removePlanes()
             glassButton.isHidden = false
+            metalLabel.isHidden = false
+            metalnessSlider.isHidden = false
+            roughLabel.isHidden = false
+            roughnessSlider.isHidden = false
             return
         }
 
@@ -203,10 +273,6 @@ extension ARViewController: UIImagePickerControllerDelegate, UINavigationControl
         imagePicker.delegate = self
         
         present(imagePicker, animated: true, completion: nil)
-    }
-    
-    @objc private func changleGlass() {
-        arSceneManager.pictureNode?.changeReflection()
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
