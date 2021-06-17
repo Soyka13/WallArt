@@ -191,30 +191,30 @@ private extension ARViewController {
 //            $0.left.equalTo(view.safeAreaLayoutGuide).offset(30)
 //            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
 //        }
-        view.addSubview(metalLabel)
-        metalLabel.snp.makeConstraints {
-            $0.bottom.equalTo(galleryButton.snp.top).offset(-20)
-            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
-            $0.width.equalTo(100)
-        }
-        view.addSubview(metalnessSlider)
-        metalnessSlider.snp.makeConstraints {
-            $0.centerY.equalTo(metalLabel.snp.centerY)
-            $0.left.equalTo(metalLabel.snp.right).offset(20)
-            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
-        view.addSubview(roughLabel)
-        roughLabel.snp.makeConstraints {
-            $0.bottom.equalTo(metalLabel.snp.top).offset(-20)
-            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
-            $0.width.equalTo(100)
-        }
-        view.addSubview(roughnessSlider)
-        roughnessSlider.snp.makeConstraints {
-            $0.centerY.equalTo(roughLabel.snp.centerY)
-            $0.left.equalTo(roughLabel.snp.right).offset(20)
-            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
+//        view.addSubview(metalLabel)
+//        metalLabel.snp.makeConstraints {
+//            $0.bottom.equalTo(galleryButton.snp.top).offset(-20)
+//            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
+//            $0.width.equalTo(100)
+//        }
+//        view.addSubview(metalnessSlider)
+//        metalnessSlider.snp.makeConstraints {
+//            $0.centerY.equalTo(metalLabel.snp.centerY)
+//            $0.left.equalTo(metalLabel.snp.right).offset(20)
+//            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
+//        }
+//        view.addSubview(roughLabel)
+//        roughLabel.snp.makeConstraints {
+//            $0.bottom.equalTo(metalLabel.snp.top).offset(-20)
+//            $0.left.equalTo(view.safeAreaLayoutGuide).offset(20)
+//            $0.width.equalTo(100)
+//        }
+//        view.addSubview(roughnessSlider)
+//        roughnessSlider.snp.makeConstraints {
+//            $0.centerY.equalTo(roughLabel.snp.centerY)
+//            $0.left.equalTo(roughLabel.snp.right).offset(20)
+//            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-20)
+//        }
     }
 }
 

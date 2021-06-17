@@ -25,19 +25,22 @@ class PaintingNode: SCNNode {
     var backgroundBoxNode: SCNNode?
     var imageNode: SCNNode?
     var glassNode: SCNNode?
+    var glassNode1: SCNNode?
     
     lazy var lowReflection = SCNMaterial().then {
         $0.lightingModel = .physicallyBased
-        $0.roughness.contents = 0.3
-        $0.metalness.contents = 0.5
-        $0.transparency = 0.25
+//        $0.diffuse.contents = UIColor.gray
+        $0.specular.contents = UIColor(white: 0.6, alpha: 1.0)
+        $0.roughness.contents = 0.1
+        $0.metalness.contents = 0.2
+        $0.transparency = 0.3
     }
     
     lazy var hightReflection = SCNMaterial().then {
         $0.lightingModel = .physicallyBased
-        $0.roughness.contents = 0.25
+        $0.roughness.contents = 0.05
         $0.metalness.contents = 1.0
-        $0.transparency = 0.25
+        $0.transparency = 0.3
     }
     
     init(image: UIImage) {
@@ -102,16 +105,24 @@ class PaintingNode: SCNNode {
     
     func setupForeground(position: SCNVector3) {
         guard let backgroundBoxNode = backgroundBoxNode else { return }
-        let glassGeometry = SCNBox(width: width, height: height, length: 0.0005, chamferRadius: 0)
-        print("width \(width) height \(height)")
+        let reflectiveGlass = SCNBox(width: width/2, height: height, length: 0.001, chamferRadius: 0)
         
-        glassGeometry.materials = [hightReflection]
+        reflectiveGlass.materials = [hightReflection]
         
-        glassNode = SCNNode(geometry: glassGeometry)
-        if let imageNode = glassNode {
-            imageNode.position = SCNVector3(backgroundBoxNode.position.x, position.y, position.z + Float(frameLength)/6 + 0.0011)
-            print("Position of image node: \(imageNode.position)")
-            backgroundBoxNode.addChildNode(imageNode)
+        glassNode = SCNNode(geometry: reflectiveGlass)
+        if let node = glassNode {
+            node.position = SCNVector3(backgroundBoxNode.position.x + Float(width)/4, position.y, position.z + Float(frameLength)/6 + 0.0011)
+            backgroundBoxNode.addChildNode(node)
+        }
+        
+        let nonReflectiveGlass = SCNBox(width: width/2, height: height, length: 0.001, chamferRadius: 0)
+        
+        nonReflectiveGlass.materials = [lowReflection]
+        
+        glassNode1 = SCNNode(geometry: nonReflectiveGlass)
+        if let node = glassNode1 {
+            node.position = SCNVector3(backgroundBoxNode.position.x - Float(width)/4, position.y, position.z + Float(frameLength)/6 + 0.0011)
+            backgroundBoxNode.addChildNode(node)
         }
     }
     
